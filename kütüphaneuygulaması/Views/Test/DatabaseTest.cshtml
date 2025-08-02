@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "Veritabanı Testi";
+}
+
+<div class="container mt-4">
+    <h1>Veritabanı Testi</h1>
+    
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <h4>Hata Oluştu!</h4>
+            <p><strong>Hata Mesajı:</strong> @ViewBag.Error</p>
+            @if (ViewBag.StackTrace != null)
+            {
+                <details>
+                    <summary>Hata Detayları</summary>
+                    <pre class="mt-2">@ViewBag.StackTrace</pre>
+                </details>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Veritabanı İstatistikleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kitap Sayısı:</strong> @ViewBag.BookCount</p>
+                        <p><strong>Kullanıcı Sayısı:</strong> @ViewBag.UserCount</p>
+                        <p><strong>Kategori Sayısı:</strong> @ViewBag.CategoryCount</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Veritabanı Bağlantı Bilgileri</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Veritabanı Adı:</strong> @ViewBag.DatabaseName</p>
+                        <p><strong>Sunucu Adı:</strong> @ViewBag.ServerName</p>
+                        <p><strong>Bağlantı Dizesi:</strong></p>
+                        <code class="small">@ViewBag.ConnectionString</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-success mt-3">
+            <h4>✅ Veritabanı Bağlantısı Başarılı!</h4>
+            <p>Veritabanı bağlantısı ve sorguları başarıyla çalıştırıldı.</p>
+        </div>
+    }
+    
+    <div class="mt-3">
+        <a href="@Url.Action("Index", "Test")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Geri Dön
+        </a>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+            <i class="fas fa-home"></i> Ana Sayfa
+        </a>
+    </div>
+</div> 

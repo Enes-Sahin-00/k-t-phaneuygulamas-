@@ -1,0 +1,35 @@
+﻿@model IEnumerable<kütüphaneuygulaması.Models.orders>
+@{
+    ViewData["Title"] = "Siparişlerim";
+    var enrichedOrders = ViewBag.EnrichedOrders as IEnumerable<dynamic>;
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<h1 class="mb-4 text-center">Siparişlerim</h1>
+<div class="table-responsive">
+    <table class="table table-hover align-middle shadow-sm" style="background: var(--yumusak-beyaz); border-radius: 12px; overflow: hidden;">
+        <thead class="table-dark" style="background: var(--gece-laciverti); color: var(--yumusak-beyaz);">
+            <tr>
+                <th>Kitap</th>
+                <th>Adet</th>
+                <th>Tarih</th>
+                <th>Birim Fiyat</th>
+                <th>Toplam</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (enrichedOrders != null)
+        {
+            foreach (var item in enrichedOrders)
+            {
+                <tr>
+                    <td>@item.BookTitle</td>
+                    <td>@item.quantity</td>
+                    <td>@item.orderdate.ToShortDateString()</td>
+                    <td>@item.BookPrice ₺</td>
+                    <td class="fw-bold" style="color: var(--canli-turuncu);">@item.Total ₺</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

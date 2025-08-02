@@ -1,0 +1,39 @@
+﻿@model IEnumerable<kütüphaneuygulaması.Models.report>
+
+@{
+    ViewData["Title"] = "customerreport";
+}
+
+<h1>customerreport</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.customername)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.total)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.customername)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.total)
+            </td>
+            <td>
+                    <a asp-action="customerOrders" asp-route-id="@item.Id">Details</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

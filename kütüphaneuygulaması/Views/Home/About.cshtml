@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = "Hakkımızda";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h3>@ViewBag.CompanyName</h3>
+                            <p class="lead">@ViewBag.Description</p>
+                            <p>Kuruluş Yılı: @ViewBag.FoundedYear</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-light p-3 rounded">
+                                <h5>Misyonumuz</h5>
+                                <p>Bilgiye erişimi kolaylaştırmak ve kütüphane yönetimini modernize etmek.</p>
+                                
+                                <h5>Vizyonumuz</h5>
+                                <p>Teknoloji ile kütüphane hizmetlerini en üst seviyeye çıkarmak.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-primary text-white p-3 rounded">
+                                <h4>1000+</h4>
+                                <p>Kitap</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-success text-white p-3 rounded">
+                                <h4>500+</h4>
+                                <p>Kullanıcı</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="bg-info text-white p-3 rounded">
+                                <h4>50+</h4>
+                                <p>Kategori</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (TempData["AboutMessage"] != null)
+                    {
+                        <div class="alert alert-info mt-4">
+                            <i class="fas fa-info-circle"></i> @TempData["AboutMessage"]
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

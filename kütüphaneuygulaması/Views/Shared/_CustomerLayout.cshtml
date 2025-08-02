@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kütüphane Uygulaması</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css?v=@DateTime.Now.Ticks" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Kütüphane</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/Books/catalogue">Kitaplar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Category/List">Kategoriler</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/About">Hakkımızda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/Contact">Bize Ulaşın</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("userid")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hesabım
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/Cart/Index"><i class="fas fa-shopping-cart me-2"></i>Sepetim</a></li>
+                                <li><a class="dropdown-item" href="/orders/myorders"><i class="fas fa-list me-2"></i>Siparişlerim</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/usersaccounts/Edit"><i class="fas fa-user me-2"></i>Profilim</a></li>
+                                <li><a class="dropdown-item" href="/usersaccounts/Logout"><i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="favoritesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-heart"></i> Favorilerim <span id="favoriteCount" class="badge bg-danger ms-1">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="favoritesDropdown" style="width: 300px;">
+                                <li><h6 class="dropdown-header">Son Favorilerim</h6></li>
+                                <li><div id="favoritesList" class="px-3 py-2"><div class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</div></div></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="/Favorite/Index"><i class="fas fa-heart me-2"></i>Tüm Favorilerimi Gör</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/usersaccounts/Edit"><i class="fas fa-user me-2"></i>Profilim</a></li>
+                                <li><a class="dropdown-item" href="/usersaccounts/Logout"><i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link">Hoş geldin, @Context.Session.GetString("Name")</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/usersaccounts/login">Giriş</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/usersaccounts/Create">Kayıt Ol</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container py-4">
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @TempData["Message"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @RenderBody()
+    </main>
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Kütüphane Uygulaması</h5>
+                    <p>Modern ve kullanıcı dostu kütüphane yönetim sistemi.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; @DateTime.Now.Year - Kütüphane Uygulaması. Tüm hakları saklıdır.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Favori sayısını güncelle
+        updateFavoriteCount();
+        
+        // Favoriler dropdown'ını açtığında favorileri yükle
+        $('#favoritesDropdown').on('show.bs.dropdown', function() {
+            loadFavoritesList();
+        });
+        
+        function updateFavoriteCount() {
+            $.get('/Home/UserFavorites', function(data) {
+                if (data.success) {
+                    $('#favoriteCount').text(data.count);
+                }
+            }).fail(function() {
+                $('#favoriteCount').text('0');
+            });
+        }
+        
+        function loadFavoritesList() {
+            $.get('/Home/UserFavorites', function(data) {
+                if (data.success && data.favorites.length > 0) {
+                    var html = '';
+                    data.favorites.slice(0, 5).forEach(function(favorite) {
+                        html += '<div class="d-flex align-items-center mb-2 p-2 border rounded">';
+                        if (favorite.bookImage) {
+                            html += '<img src="/images/' + favorite.bookImage + '" class="me-2" style="width: 40px; height: 50px; object-fit: cover;" alt="' + favorite.bookTitle + '">';
+                        } else {
+                            html += '<div class="me-2 bg-light d-flex align-items-center justify-content-center" style="width: 40px; height: 50px;"><i class="fas fa-book text-muted"></i></div>';
+                        }
+                        html += '<div class="flex-grow-1">';
+                        html += '<h6 class="mb-0 small">' + favorite.bookTitle + '</h6>';
+                        html += '<small class="text-muted">' + favorite.bookAuthor + '</small><br>';
+                        html += '<small class="text-primary fw-bold">' + favorite.bookPrice + ' ₺</small>';
+                        html += '</div>';
+                        html += '<div class="text-end">';
+                        html += '<small class="text-muted d-block">' + favorite.timeAgo + '</small>';
+                        html += '<a href="/Favorite/Index" class="btn btn-sm btn-outline-danger"><i class="fas fa-heart"></i></a>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    $('#favoritesList').html(html);
+                } else {
+                    $('#favoritesList').html('<div class="text-center"><p class="text-muted small">Henüz favori kitabınız yok</p><a href="/Books/catalogue" class="btn btn-sm btn-outline-primary">Kitap Ara</a></div>');
+                }
+            }).fail(function() {
+                $('#favoritesList').html('<div class="text-center"><p class="text-muted small">Favoriler yüklenemedi</p></div>');
+            });
+        }
+    });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html> 

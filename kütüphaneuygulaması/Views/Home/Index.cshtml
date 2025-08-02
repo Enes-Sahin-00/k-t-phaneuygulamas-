@@ -1,0 +1,191 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1>Kütüphanenizi Keşfedin</h1>
+                <p class="lead">Binlerce kitap, e-kitap ve dijital kaynak. Modern kütüphane deneyimi için doğru adrestesiniz.</p>
+                <div class="d-flex gap-3">
+                    <a href="/Books/catalogue" class="btn btn-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Kitap Ara
+                    </a>
+                    <a href="/usersaccounts/Create" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Üye Ol
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-books" style="font-size: 8rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="search-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h3 class="text-center mb-4">Hızlı Kitap Arama</h3>
+                <form class="search-form" method="get" action="/Books/catalogue">
+                    <div class="flex-grow-1">
+                        <input type="text" class="form-control form-control-lg" name="searchTerm" placeholder="Kitap adı, yazar veya konu ara...">
+                    </div>
+                    <div>
+                        <select class="form-select" name="category">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="1">Roman</option>
+                            <option value="2">Bilim</option>
+                            <option value="3">Tarih</option>
+                            <option value="4">Felsefe</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Ara
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="container mb-5">
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="number">15,000+</div>
+                <div class="label">Toplam Kitap</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="number">5,000+</div>
+                <div class="label">Aktif Üye</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="number">50+</div>
+                <div class="label">Kategori</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-card">
+                <div class="icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="number">24/7</div>
+                <div class="label">Erişim</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="container mb-5">
+    <h2 class="text-center mb-5">Popüler Kategoriler</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-book-open text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">Roman</h5>
+                    <p class="card-text">Klasik ve modern romanlar, hikayeler ve edebiyat eserleri.</p>
+                    <a href="/Books/catalogue?category=1" class="btn btn-outline-primary">Gözat</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-microscope text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">Bilim</h5>
+                    <p class="card-text">Bilimsel araştırmalar, teknoloji ve akademik kaynaklar.</p>
+                    <a href="/Books/catalogue?category=2" class="btn btn-outline-primary">Gözat</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-landmark text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="card-title">Tarih</h5>
+                    <p class="card-text">Tarihsel araştırmalar, biyografiler ve kültürel eserler.</p>
+                    <a href="/Books/catalogue?category=3" class="btn btn-outline-primary">Gözat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="container mb-5">
+    <h2 class="text-center mb-5">Neden Bizi Seçmelisiniz?</h2>
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-mobile-alt text-primary" style="font-size: 2rem;"></i>
+                    </div>
+                    <h5 class="card-title">Mobil Uyumlu</h5>
+                    <p class="card-text">Tüm cihazlardan kolayca erişim sağlayın. Responsive tasarım ile her yerde kütüphaneniz.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-shield-alt text-success" style="font-size: 2rem;"></i>
+                    </div>
+                    <h5 class="card-title">Güvenli Erişim</h5>
+                    <p class="card-text">JWT tabanlı güvenlik sistemi ile verileriniz güvende. Şifreli bağlantılar.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-bolt text-warning" style="font-size: 2rem;"></i>
+                    </div>
+                    <h5 class="card-title">Hızlı Performans</h5>
+                    <p class="card-text">Optimize edilmiş veritabanı ve cache sistemi ile hızlı arama ve yükleme.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h2 class="mb-3">Hemen Üye Olun</h2>
+        <p class="lead mb-4">Binlerce kitaba ücretsiz erişim için hemen üye olun ve kütüphane deneyimini keşfedin.</p>
+        <a href="/usersaccounts/Create" class="btn btn-light btn-lg me-3">
+            <i class="fas fa-user-plus me-2"></i>Üye Ol
+        </a>
+        <a href="/Books/catalogue" class="btn btn-outline-light btn-lg">
+            <i class="fas fa-search me-2"></i>Kitap Ara
+        </a>
+    </div>
+</section>

@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Bize Ulaşın";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>İletişim Bilgileri</h4>
+                            <div class="mb-3">
+                                <strong>E-posta:</strong><br>
+                                <a href="mailto:@ViewBag.Email">@ViewBag.Email</a>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Telefon:</strong><br>
+                                <a href="tel:@ViewBag.Phone">@ViewBag.Phone</a>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Adres:</strong><br>
+                                @ViewBag.Address
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Çalışma Saatleri</h4>
+                            <ul class="list-unstyled">
+                                <li><strong>Pazartesi - Cuma:</strong> 09:00 - 18:00</li>
+                                <li><strong>Cumartesi:</strong> 09:00 - 16:00</li>
+                                <li><strong>Pazar:</strong> Kapalı</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4>Mesaj Gönder</h4>
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Ad Soyad</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-posta</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Konu</label>
+                            <input type="text" class="form-control" id="subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mesaj</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Mesaj Gönder</button>
+                    </form>
+
+                    @if (TempData["ContactMessage"] != null)
+                    {
+                        <div class="alert alert-info mt-4">
+                            <i class="fas fa-info-circle"></i> @TempData["ContactMessage"]
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

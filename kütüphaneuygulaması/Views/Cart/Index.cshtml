@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Sepetim";
+    var enrichedCart = ViewBag.EnrichedCart as IEnumerable<dynamic>;
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<h1 class="mb-4 text-center">Sepetim</h1>
+@if (enrichedCart == null || !enrichedCart.Any())
+{
+    <div class="alert alert-info text-center">Sepetinizde ürün yok.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle shadow-sm" style="background: var(--yumusak-beyaz); border-radius: 12px; overflow: hidden;">
+            <thead class="table-dark" style="background: var(--gece-laciverti); color: var(--yumusak-beyaz);">
+                <tr>
+                    <th>Kitap</th>
+                    <th>Adet</th>
+                    <th>Birim Fiyat</th>
+                    <th>Toplam</th>
+                    <th>Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in enrichedCart)
+            {
+                <tr>
+                    <td>@item.BookTitle</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.BookPrice ₺</td>
+                    <td class="fw-bold" style="color: var(--canli-turuncu);">@item.Total ₺</td>
+                    <td>
+                        <form asp-action="Remove" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <form asp-action="Checkout" method="post" class="text-end mt-3">
+        <button type="submit" class="btn btn-primary">Satın Al</button>
+    </form>
+} 

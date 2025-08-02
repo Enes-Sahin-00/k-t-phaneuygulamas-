@@ -1,0 +1,234 @@
+﻿@model IEnumerable<kütüphaneuygulaması.Models.Book>
+@{
+    ViewData["Title"] = "Kitap Kataloğu";
+    var selectedCategory = Context.Request.Query["category"].ToString();
+}
+
+<!-- Page Header -->
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-books me-3"></i>Kitap Kataloğu
+                </h1>
+                <p class="lead mb-0">Binlerce kitap arasından aradığınızı bulun</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-light text-primary fs-6">@Model.Count() Kitap</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search and Filter Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" action="@Url.Action("catalogue", "Books")" class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchTerm" class="form-label">
+                        <i class="fas fa-search me-2"></i>Arama
+                    </label>
+                    <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                           value="@Context.Request.Query["searchTerm"]" 
+                           placeholder="Kitap adı, yazar veya konu...">
+                </div>
+                <div class="col-md-3">
+                    <label for="category" class="form-label">
+                        <i class="fas fa-tags me-2"></i>Kategori
+                    </label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">Tüm Kategoriler</option>
+                        <option value="1" selected="@(selectedCategory == "1")">Roman</option>
+                        <option value="2" selected="@(selectedCategory == "2")">Bilim</option>
+                        <option value="3" selected="@(selectedCategory == "3")">Tarih</option>
+                        <option value="4" selected="@(selectedCategory == "4")">Felsefe</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="minPrice" class="form-label">
+                        <i class="fas fa-tag me-2"></i>Min Fiyat
+                    </label>
+                    <input type="number" class="form-control" id="minPrice" name="minPrice" 
+                           value="@Context.Request.Query["minPrice"]" placeholder="0">
+                </div>
+                <div class="col-md-2">
+                    <label for="maxPrice" class="form-label">
+                        <i class="fas fa-tag me-2"></i>Max Fiyat
+                    </label>
+                    <input type="number" class="form-control" id="maxPrice" name="maxPrice" 
+                           value="@Context.Request.Query["maxPrice"]" placeholder="1000">
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var book in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card book-card h-100">
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(book.imgfile))
+                            {
+                                @if (book.imgfile.StartsWith("http"))
+                                {
+                                    <img src="@book.imgfile" class="card-img-top" alt="@book.title" 
+                                         onerror="this.src='/images/default-book.jpg'">
+                                }
+                                else
+                                {
+                                    <img src="/images/@book.imgfile" class="card-img-top" alt="@book.title" 
+                                         onerror="this.src='/images/default-book.jpg'">
+                                }
+                            }
+                            else
+                            {
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-book text-muted" style="font-size: 4rem;"></i>
+                                </div>
+                            }
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-success">Stok: @book.bookquantity</span>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@book.title</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-user me-1"></i>@book.author
+                            </p>
+                            <p class="card-text small">
+                                <i class="fas fa-tag me-1"></i>@(book.Category?.Name ?? "Kategori Yok")
+                            </p>
+                            <div class="price mb-3">
+                                <span class="fs-5 fw-bold text-primary">@book.price.ToString("C")</span>
+                            </div>
+                            <div class="card-actions mt-auto">
+                                <div class="d-grid gap-2">
+                                    <a href="@Url.Action("Details", "Books", new { id = book.Id })" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>Detaylar
+                                    </a>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-success btn-sm" 
+                                                onclick="addToCart(@book.Id)">
+                                            <i class="fas fa-cart-plus me-1"></i>Sepete Ekle
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                onclick="addToFavorites(@book.Id)">
+                                            <i class="fas fa-heart me-1"></i>Favori
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav aria-label="Kitap sayfaları" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("catalogue", "Books", new { page = ViewBag.CurrentPage - 1, searchTerm = Context.Request.Query["searchTerm"], category = Context.Request.Query["category"], minPrice = Context.Request.Query["minPrice"], maxPrice = Context.Request.Query["maxPrice"] })">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("catalogue", "Books", new { page = i, searchTerm = Context.Request.Query["searchTerm"], category = Context.Request.Query["category"], minPrice = Context.Request.Query["minPrice"], maxPrice = Context.Request.Query["maxPrice"] })">@i</a>
+                        </li>
+                    }
+
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("catalogue", "Books", new { page = ViewBag.CurrentPage + 1, searchTerm = Context.Request.Query["searchTerm"], category = Context.Request.Query["category"], minPrice = Context.Request.Query["minPrice"], maxPrice = Context.Request.Query["maxPrice"] })">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <!-- No Results -->
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-search text-muted" style="font-size: 4rem;"></i>
+            </div>
+            <h3 class="text-muted mb-3">Kitap Bulunamadı</h3>
+            <p class="text-muted mb-4">Arama kriterlerinize uygun kitap bulunamadı. Farklı anahtar kelimeler deneyebilir veya filtreleri değiştirebilirsiniz.</p>
+            <a href="@Url.Action("catalogue", "Books")" class="btn btn-primary">
+                <i class="fas fa-undo me-2"></i>Tüm Kitapları Görüntüle
+            </a>
+        </div>
+    }
+</div>
+
+<script>
+function addToCart(bookId) {
+    $.post('/Cart/AddToCart', { bookId: bookId }, function(response) {
+        if (response.success) {
+            showAlert('success', 'Kitap sepete eklendi!');
+        } else {
+            showAlert('danger', 'Kitap sepete eklenirken hata oluştu.');
+        }
+    }).fail(function() {
+        showAlert('danger', 'Bir hata oluştu. Lütfen tekrar deneyin.');
+    });
+}
+
+function addToFavorites(bookId) {
+    $.post('/Favorite/AddToFavorites', { bookId: bookId }, function(response) {
+        if (response.success) {
+            showAlert('success', 'Kitap favorilere eklendi!');
+        } else {
+            showAlert('danger', 'Kitap favorilere eklenirken hata oluştu.');
+        }
+    }).fail(function() {
+        showAlert('danger', 'Bir hata oluştu. Lütfen tekrar deneyin.');
+    });
+}
+
+function showAlert(type, message) {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    // Remove existing alerts
+    $('.alert').remove();
+    
+    // Add new alert at the top
+    $('.container').prepend(alertHtml);
+    
+    // Auto dismiss after 3 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 3000);
+}
+</script>
+
+
